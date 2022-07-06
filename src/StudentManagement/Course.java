@@ -63,6 +63,7 @@ public class Course extends javax.swing.JFrame {
         jLabel2.setText("Duracion");
 
         jButton1.setForeground(new java.awt.Color(253, 253, 253));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/add.jpg"))); // NOI18N
         jButton1.setText("Agregar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -71,6 +72,7 @@ public class Course extends javax.swing.JFrame {
         });
 
         jButton2.setForeground(new java.awt.Color(252, 252, 252));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cancelar.jpg"))); // NOI18N
         jButton2.setText("Cancelar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

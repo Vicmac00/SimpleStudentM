@@ -28,6 +28,7 @@ public class Teacher extends javax.swing.JFrame {
         initComponents();
         courses();
         batch ();
+        campus();
         jButton1.setBackground(Color.GREEN);
         jButton2.setBackground(Color.RED);
     }
@@ -36,6 +37,7 @@ public class Teacher extends javax.swing.JFrame {
     PreparedStatement pst;
     PreparedStatement pst1;
     PreparedStatement pst2;
+    PreparedStatement pst3;
     ResultSet rs;
     
     public void courses()
@@ -84,6 +86,29 @@ public class Teacher extends javax.swing.JFrame {
         }
            
     }
+    
+    public void campus ()
+    {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3307/student","root","");
+            pst3 = con.prepareStatement(" select * from campus");
+            rs = pst3.executeQuery();
+            
+            txtCampus.removeAllItems();
+            
+            while (rs.next())
+            {
+                txtCampus.addItem(rs.getString(2));
+            }
+            
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Teacher.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Teacher.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -107,6 +132,8 @@ public class Teacher extends javax.swing.JFrame {
         txtLast = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        txtCampus = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,6 +178,7 @@ public class Teacher extends javax.swing.JFrame {
         txtBatch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jButton1.setForeground(new java.awt.Color(253, 253, 253));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/guardar.jpg"))); // NOI18N
         jButton1.setText("Guardar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,12 +187,18 @@ public class Teacher extends javax.swing.JFrame {
         });
 
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/cancelar.jpg"))); // NOI18N
         jButton2.setText("Cancelar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setText("Campus");
+
+        txtCampus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -179,13 +213,16 @@ public class Teacher extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
                         .addGap(53, 53, 53)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtFirst)
                             .addComponent(txtCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtLast, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)))
+                            .addComponent(txtLast, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtCampus, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtBatch, javax.swing.GroupLayout.Alignment.LEADING, 0, 150, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(260, 260, 260)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -213,7 +250,11 @@ public class Teacher extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtBatch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(100, 100, 100)
+                .addGap(34, 34, 34)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtCampus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(44, 44, 44)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -243,15 +284,17 @@ public class Teacher extends javax.swing.JFrame {
             String lastname = txtLast.getText();
             String course = txtCourse.getSelectedItem().toString();
             String batch = txtBatch.getSelectedItem().toString();
+            String campus = txtCampus.getSelectedItem().toString();
 
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3307/student","root","");
             
-            pst = con.prepareStatement("INSERT into teacher (firstname,lastname,course,batch)values(?,?,?,?)");
+            pst = con.prepareStatement("INSERT into teacher (firstname,lastname,course,batch,campus)values(?,?,?,?,?)");
                 pst.setString(1, firstname);
                 pst.setString(2, lastname);
                 pst.setString(3, course);
                 pst.setString(4, batch);
+                pst.setString(5, campus);
                 
                 pst.executeUpdate();
                 JOptionPane.showMessageDialog(null,"......Profesor  Creado......");
@@ -259,6 +302,7 @@ public class Teacher extends javax.swing.JFrame {
                 txtLast.setText("");
                 txtCourse.setSelectedIndex(-1);
                 txtBatch.setSelectedIndex(-1);
+                txtCampus.setSelectedIndex(-1);
                 
             
         } catch (ClassNotFoundException ex) {
@@ -320,9 +364,11 @@ public class Teacher extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JComboBox<String> txtBatch;
+    private javax.swing.JComboBox<String> txtCampus;
     private javax.swing.JComboBox<String> txtCourse;
     private javax.swing.JTextField txtFirst;
     private javax.swing.JTextField txtLast;
